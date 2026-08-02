@@ -5,9 +5,11 @@
 
 int main()
 {
+    char *shellName = "\033[0;35mft_shell> \033[0m";
     char token = 0;
     char *str = 0;
     int strSize = 0;
+    write(1, shellName, strlen(shellName));
     while (true)
     {
         read(0, &token, 1);
@@ -40,6 +42,7 @@ int main()
             free(str);
             str = NULL;
             strSize = 0;
+            write(1, shellName, strlen(shellName));
         }
         
     }
