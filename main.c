@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
 
 int main()
 {
@@ -31,6 +32,21 @@ int main()
         }
         else
         {
+            char *cmdlist[256];
+            char *piece = strtok(str, " ");
+            int i = 0;
+            while (piece != NULL)
+            {
+                /*
+                write(1, piece, strlen(piece));
+                write(1, "\n", 1);
+                */
+                cmdlist[i] = piece;
+                i++;
+                piece = strtok(NULL, " ");
+            }
+            cmdlist[i+1] = NULL;
+
             if (str == NULL)
             {
                 write(1, shellName, strlen(shellName));
@@ -45,40 +61,27 @@ int main()
             else
             {
                 pid = fork();
-                if(pid < 0)
+                if (pid < 0)
                 {
-                    write(1, "frok failed!",12);
+                    write(1, "frok failed!", 12);
                     free(str);
                     return 1;
                 }
-                else if(pid == 0)
+                else if (pid == 0)
                 {
-                    write(1, "Hello ", 6);
-                    write(1, "\n", 1);
-                    char *test[] = {"ls"};
-                    execvp(test[0], test);
+                    write(1, "Hello\n", 7);
+
+                    char *test[] = {"ls", NULL};
+                    execvp(cmdlist[0], cmdlist);
+
+                    // güvenli kapanış
+                    exit(127);
                 }
                 else
                 {
+                    // child bitmesi bekleniyor
                     wait(NULL);
-                    write(1, "World!", 6);
-                    write(1, "\n", 1);
-                }
-
-                char *piece = strtok(str, " ");
-                while (piece != NULL)
-                {
-                    /*
-                    write(1, piece, strlen(piece));
-                    write(1, "\n", 1);
-                    */
-                    if(strcmp(piece, "ls") == 0)
-                    {
-                        write(1, "a", 1);
-                        write(1, "\n", 1);
-                    }
-
-                    piece = strtok(NULL, " ");
+                    // write(1, "World!\n", 7);
                 }
             }
 
