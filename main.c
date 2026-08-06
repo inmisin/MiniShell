@@ -32,6 +32,12 @@ int main()
         }
         else
         {
+            if (str == NULL)
+            {
+                write(1, shellName, strlen(shellName));
+                continue;
+            }
+
             char *cmdlist[256];
             char *piece = strtok(str, " ");
             int i = 0;
@@ -45,13 +51,7 @@ int main()
                 i++;
                 piece = strtok(NULL, " ");
             }
-            cmdlist[i+1] = NULL;
-
-            if (str == NULL)
-            {
-                write(1, shellName, strlen(shellName));
-                continue;
-            }
+            cmdlist[i] = NULL;
 
             if (strcmp(str, "exit") == 0)
             {
@@ -69,19 +69,20 @@ int main()
                 }
                 else if (pid == 0)
                 {
-                    write(1, "Hello\n", 7);
+                    write(1, "child\n", 6);
 
                     char *test[] = {"ls", NULL};
                     execvp(cmdlist[0], cmdlist);
 
                     // güvenli kapanış
+                    free(str);
                     exit(127);
                 }
                 else
                 {
                     // child bitmesi bekleniyor
                     wait(NULL);
-                    // write(1, "World!\n", 7);
+                    write(1, "parent\n", 7);
                 }
             }
 
