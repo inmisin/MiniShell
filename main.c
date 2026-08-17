@@ -69,7 +69,7 @@ int main()
                 }
                 else if (pid == 0)
                 {
-                    write(1, "child\n", 6);
+                    //write(1, "child\n", 6); // it works btw
 
                     char *test[] = {"ls", NULL};
                     execvp(cmdlist[0], cmdlist);
@@ -82,7 +82,7 @@ int main()
                 {
                     // child bitmesi bekleniyor
                     wait(NULL);
-                    write(1, "parent\n", 7);
+                    //write(1, "parent\n", 7); // it works btw
                 }
             }
 
