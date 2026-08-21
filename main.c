@@ -3,6 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <stdio.h>
+
+#include "ft_strcmp.h"
+
+void execute_command(char **args)
+{
+    if (args[0] == NULL)
+    {
+        return;
+    }
+}
 
 int main()
 {
@@ -40,18 +51,18 @@ int main()
 
             char *cmdlist[256];
             char *piece = strtok(str, " ");
-            int i = 0;
+            int commandCount = 0;
             while (piece != NULL)
             {
                 /*
                 write(1, piece, strlen(piece));
                 write(1, "\n", 1);
                 */
-                cmdlist[i] = piece;
-                i++;
+                cmdlist[commandCount] = piece;
+                commandCount++;
                 piece = strtok(NULL, " ");
             }
-            cmdlist[i] = NULL;
+            cmdlist[commandCount] = NULL;
 
             if (strcmp(str, "exit") == 0)
             {
@@ -71,8 +82,10 @@ int main()
                 {
                     //write(1, "child\n", 6); // it works btw
 
-                    char *test[] = {"ls", NULL};
-                    execvp(cmdlist[0], cmdlist);
+                    if (ft_strcmp(cmdlist[0], "ls") == 0 || ft_strcmp(cmdlist[0], "cat") == 0  || ft_strcmp(cmdlist[0], "grep") == 0 )
+                    {
+                        execvp(cmdlist[0], cmdlist);
+                    }
 
                     // güvenli kapanış
                     free(str);
@@ -82,7 +95,17 @@ int main()
                 {
                     // child bitmesi bekleniyor
                     wait(NULL);
-                    //write(1, "parent\n", 7); // it works btw
+
+                    if (ft_strcmp(cmdlist[0], "cd") == 0)
+                    {
+                        chdir(cmdlist[1]);
+                        char s[100];
+                        printf("%s\n", getcwd(s, 100));
+                    }
+                    // shows directory
+                    // char s[100];
+                    // printf("%s\n", getcwd(s, 100));
+                    // write(1, "parent\n", 7); // it works btw
                 }
             }
 
