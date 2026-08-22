@@ -1,18 +1,30 @@
 #include <unistd.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
 #include <stdio.h>
 
-#include "ft_strcmp.h"
+#include "ft/ft_strcmp.h"
+#include "ft/ft_printf.h"
 
-void execute_command(char **args)
+void command_cd(char *arg)
 {
-    if (args[0] == NULL)
+    if (arg != NULL)
     {
-        return;
+        chdir(arg);
+        char s[100];
+        ft_printf("%s\n", getcwd(s, 100));
     }
+}
+
+void command_echo(char **args, int count)
+{
+    for (int i = 1; i < count; i++)
+    {
+        ft_printf("%s ", args[i]);
+    }
+
+    ft_putchar('\n');
 }
 
 int main()
@@ -23,7 +35,7 @@ int main()
     char *str = 0;
     int strSize = 0;
     write(1, shellName, strlen(shellName));
-    while (true)
+    while (1)
     {
         read(0, &token, 1);
         if (token != '\n')
@@ -54,10 +66,6 @@ int main()
             int commandCount = 0;
             while (piece != NULL)
             {
-                /*
-                write(1, piece, strlen(piece));
-                write(1, "\n", 1);
-                */
                 cmdlist[commandCount] = piece;
                 commandCount++;
                 piece = strtok(NULL, " ");
@@ -80,9 +88,9 @@ int main()
                 }
                 else if (pid == 0)
                 {
-                    //write(1, "child\n", 6); // it works btw
+                    // write(1, "child\n", 6); // it works btw
 
-                    if (ft_strcmp(cmdlist[0], "ls") == 0 || ft_strcmp(cmdlist[0], "cat") == 0  || ft_strcmp(cmdlist[0], "grep") == 0 )
+                    if (ft_strcmp(cmdlist[0], "ls") == 0 || ft_strcmp(cmdlist[0], "cat") == 0 || ft_strcmp(cmdlist[0], "grep") == 0)
                     {
                         execvp(cmdlist[0], cmdlist);
                     }
@@ -98,25 +106,16 @@ int main()
 
                     if (ft_strcmp(cmdlist[0], "cd") == 0)
                     {
-                        chdir(cmdlist[1]);
-                        char s[100];
-                        printf("%s\n", getcwd(s, 100));
+                        command_cd(cmdlist[1]);
                     }
-                    // shows directory
-                    // char s[100];
-                    // printf("%s\n", getcwd(s, 100));
-                    // write(1, "parent\n", 7); // it works btw
+                    else if (ft_strcmp(cmdlist[0], "echo") == 0)
+                    {
+                        command_echo(cmdlist, commandCount);
+                    }
+                    
                 }
             }
 
-            /*
-            write(1, str, sizeof(char) * strSize);
-            write(1, "\n", 1);
-            free(str);
-            str = NULL;
-            strSize = 0;
-
-            */
             free(str);
             str = NULL;
             strSize = 0;
