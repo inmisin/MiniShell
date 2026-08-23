@@ -19,12 +19,21 @@ void command_cd(char *arg)
 
 void command_echo(char **args, int count)
 {
-    for (int i = 1; i < count; i++)
+    if (ft_strcmp(args[1], "-n") == 0)
     {
-        ft_printf("%s ", args[i]);
+        for (int i = 2; i < count; i++)
+        {
+            ft_printf("%s ", args[i]);
+        }
     }
-
-    ft_putchar('\n');
+    else
+    {
+        for (int i = 1; i < count; i++)
+        {
+            ft_printf("%s ", args[i]);
+        }
+        ft_putchar('\n');
+    }
 }
 
 int main()
@@ -112,7 +121,6 @@ int main()
                     {
                         command_echo(cmdlist, commandCount);
                     }
-                    
                 }
             }
 
