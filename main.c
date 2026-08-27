@@ -53,7 +53,7 @@ int main()
             char *temp = realloc(str, (strSize + 1) * sizeof(char));
             if (temp == NULL)
             {
-                write(1, "Memory is not allocated!\n", 25);
+                ft_printf("Memory is not allocated!\n");
                 free(str);
                 return 0;
             }
@@ -66,7 +66,7 @@ int main()
         {
             if (str == NULL)
             {
-                write(1, shellName, strlen(shellName));
+                ft_printf("%s", shellName);
                 continue;
             }
 
