@@ -43,7 +43,7 @@ int main()
     char token = 0;
     char *str = 0;
     int strSize = 0;
-    write(1, shellName, strlen(shellName));
+    ft_printf("%s", shellName);
     while (1)
     {
         read(0, &token, 1);
@@ -91,7 +91,7 @@ int main()
                 pid = fork();
                 if (pid < 0)
                 {
-                    write(1, "frok failed!", 12);
+                    ft_printf("frok failed!");
                     free(str);
                     return 1;
                 }
@@ -127,7 +127,7 @@ int main()
             free(str);
             str = NULL;
             strSize = 0;
-            write(1, shellName, strlen(shellName));
+            ft_printf("%s", shellName);
         }
     }
 
