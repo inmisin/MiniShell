@@ -7,6 +7,17 @@
 #include "ft/ft_strcmp.h"
 #include "ft/ft_printf.h"
 
+void external_commands(char **args)
+{
+    if(!args || !args[0])
+        return;
+
+    if (ft_strcmp(args[0], "cd") != 0 && ft_strcmp(args[0], "echo") != 0)
+    {
+        execvp(args[0], args);
+    }
+}
+
 void command_cd(char *arg)
 {
     if (arg != NULL)
@@ -98,11 +109,7 @@ int main()
                 else if (pid == 0)
                 {
                     // write(1, "child\n", 6); // it works btw
-
-                    if (ft_strcmp(cmdlist[0], "ls") == 0 || ft_strcmp(cmdlist[0], "cat") == 0 || ft_strcmp(cmdlist[0], "grep") == 0)
-                    {
-                        execvp(cmdlist[0], cmdlist);
-                    }
+                    external_commands(cmdlist);
 
                     // güvenli kapanış
                     free(str);
